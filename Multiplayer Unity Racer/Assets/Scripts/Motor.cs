@@ -3,16 +3,29 @@ using System.Collections;
 
 [RequireComponent(typeof(Rigidbody))]
 public class Motor : MonoBehaviour {
+    public Transform centerOfMass;
     public float enginePower = 20f;
     public float turnPower = 20f;
 
     public Wheel[] wheel;
 
+    Rigidbody rbody;
+
+    void Awake()
+    {
+        rbody = GetComponent<Rigidbody>();
+
+    }
+
+    void Start()
+    {
+        rbody.centerOfMass = centerOfMass.localPosition;
+    }
+
     void FixedUpdate()
     {
-        float torque = Input.GetAxis("Vertical") * 20f;
-        float turnSpeed = Input.GetAxis("Horizontal") * 20f;
-
+        float torque = Input.GetAxis("Vertical") * enginePower;
+        float turnSpeed = Input.GetAxis("Horizontal") * turnPower;
 
         // front wheel drive
         wheel[0].Move(torque);
@@ -27,7 +40,7 @@ public class Motor : MonoBehaviour {
         wheel[1].Turn(turnSpeed);
 
         // rear wheel steering
-    //    wheel[3].Turn(turnSpeed);
-      //  wheel[4].Turn(turnSpeed);
+        //    wheel[3].Turn(turnSpeed);
+        //  wheel[4].Turn(turnSpeed);
     }
 }
